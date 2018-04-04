@@ -71,30 +71,30 @@ X_train, X_test, y_train, y_test = train_test_split(ds, ls, test_size=0.33, rand
 
 def createModel():
     
-    inputs = Input((height, width, channels,))
+    #inputs = Input((height, width, channels,))
     model = Sequential()
-    model.add(Conv2D(32, (3, 3), padding='same', activation='relu', input_shape = inputs))
-    model.add(Conv2D(32, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(32, (3, 3), padding='same', activation='relu', data_format='channels_first', input_shape = (channels,height, width)))
+    model.add(Conv2D(32, (3, 3), activation='relu', data_format='channels_first'))
+    model.add(MaxPooling2D(pool_size=(2, 2), data_format='channels_first'))
     model.add(Dropout(0.25))
  
-    model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
-    model.add(Conv2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(64, (3, 3), padding='same', activation='relu', data_format='channels_first'))
+    model.add(Conv2D(64, (3, 3), activation='relu', data_format='channels_first'))
+    model.add(MaxPooling2D(pool_size=(2, 2), data_format='channels_first'))
     model.add(Dropout(0.25))
  
-    model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
-    model.add(Conv2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(64, (3, 3), padding='same', activation='relu', data_format='channels_first'))
+    model.add(Conv2D(64, (3, 3), activation='relu', data_format='channels_first'))
+    model.add(MaxPooling2D(pool_size=(2, 2), data_format='channels_first'))
     model.add(Dropout(0.25))
  
     model.add(Flatten())
     model.add(Dense(512, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(nClasses, activation='softmax'))
+    model.add(Dense(1, activation='sigmoid'))
     
-    model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
-    
+    model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+    model.summary()
     return model
 
 model = createModel()
